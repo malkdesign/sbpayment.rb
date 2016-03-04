@@ -85,6 +85,7 @@ describe Sbpayment::APIError do
       end
 
       it 'knowns the type detail' do
+        binding.pry
         expect(subject.item.summary).to eq('取消対象年月')
       end
     end
