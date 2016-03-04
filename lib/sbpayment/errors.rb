@@ -156,6 +156,13 @@ module Sbpayment
     const_set :"APIUnknown#{payment_method_code}Error", root_class_for_unknowns
   end
 
+  APIError::ITEM_DEFINITIONS.each_pair do |payment_method_code, definitions|
+    klass = const_get :"API#{payment_method_code}Error"
+    klass::Item = Class.new APIError::Item do
+      define_children_from definitions
+    end
+  end
+
   APIError::TYPE_DEFINITIONS.each_pair do |payment_method_code, definitions|
     parent = const_get :"API#{payment_method_code}Error"
     parent::Type = Class.new APIError::Type do
@@ -165,16 +172,10 @@ module Sbpayment
     definitions.each_pair do |type_code, summary|
       klass = Class.new parent do
         self::TYPE = parent::Type.fetch(type_code)
+        self::Item = Class.new parent::Item
       end
 
       const_set :"API#{payment_method_code}#{type_code}Error", klass
-    end
-  end
-
-  APIError::ITEM_DEFINITIONS.each_pair do |payment_method_code, definitions|
-    klass = const_get :"API#{payment_method_code}Error"
-    klass::Item = Class.new APIError::Item do
-      define_children_from definitions
     end
   end
 end

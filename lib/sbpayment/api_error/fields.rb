@@ -6,7 +6,7 @@ module Sbpayment
         # @return [self]
         def fetch(code)
           check_code code
-          @children[code]
+          children[code] || new(code: code)
         end
 
         # @param code [String]
@@ -18,18 +18,19 @@ module Sbpayment
           valid_code?(code) || raise(ArgumentError, "invalid code is given: #{code}")
         end
 
+        def children
+          {}
+        end
+
         private
 
         def inherited(subclass)
-          brothers = if equal? Field
-                       {}
-                     else
-                       @children ||= Hash.new(brothers) { |pool, code| pool[code] = new(code: code) }
-                     end
-
           subclass.class_eval do
-            @children = brothers.dup
-            @children.default_proc = -> pool, code { pool[code] = new(code: code) }
+            @children = {}
+
+            def self.children
+              super.merge @children
+            end
           end
         end
 

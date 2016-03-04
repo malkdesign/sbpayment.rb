@@ -84,8 +84,16 @@ describe Sbpayment::APIError do
         expect(subject).to be_an_instance_of(Sbpayment::API40203Error)
       end
 
+      it 'has a specific item' do
+        expect(subject.item).to be_an_instance_of(Sbpayment::API40203Error::Item)
+      end
+
+      it 'the item is inherited parent item' do
+        expect(subject.item.class.superclass).to equal(Sbpayment::API402Error::Item)
+      end
+
       it 'knowns the type detail' do
-        binding.pry
+        # binding.pry
         expect(subject.item.summary).to eq('取消対象年月')
       end
     end
@@ -219,11 +227,11 @@ describe Sbpayment::APIError::Type do
       expect(another).not_to equal(one)
     end
 
-    it 'returns the same instance when called with same code twice' do
-      once = Sbpayment::APIError::Type.fetch '40'
-      twice = Sbpayment::APIError::Type.fetch '40'
-      expect(twice).to equal(once)
-    end
+    # it 'returns the same instance when called with same code twice' do
+    #   once = Sbpayment::APIError::Type.fetch '40'
+    #   twice = Sbpayment::APIError::Type.fetch '40'
+    #   expect(twice).to equal(once)
+    # end
 
     it 'raises an ArgumentError when given an invalid code' do
       expect { Sbpayment::APIError::Type.fetch '405' }.to raise_error(ArgumentError)
