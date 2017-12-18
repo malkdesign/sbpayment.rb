@@ -19,7 +19,7 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version = '>= 2.2'
 
-  spec.add_dependency 'faraday', '~> 0.13.1'
+  spec.add_dependency 'faraday', '~> 0.9.0'
   spec.add_dependency 'builder'
   spec.add_dependency 'xml-simple'
   spec.add_development_dependency 'bundler', '~> 1.8'
