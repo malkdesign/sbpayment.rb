@@ -30,7 +30,7 @@ module Sbpayment
           include ParameterDefinition
 
           tag 'monthly_charge'
-          key :div_settele, default: '1'
+          key :div_settele, default: '0'
           key :last_charge_month
           key :camp_type, default: '0'
         end
